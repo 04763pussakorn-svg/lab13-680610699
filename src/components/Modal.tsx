@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { type TaskCardProps } from "../libs/Todolist";
 
@@ -10,13 +10,29 @@ export default function Modal({ onAdd }: props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    if (title.trim() === "") return;
 
-  const titleOnchange = (event: any) => {
+    const newTask: TaskCardProps = {
+      id: uuidv4(),
+      title,
+      description,
+      isDone: false,
+    };
+
+    onAdd(newTask);
+
+    setTitle("");
+    setDescription("");
+
+    document.getElementById("closeModal")?.click();
+  };
+
+  const titleOnchange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 
-  const descriptionOnchang = (event: any) => {
+  const descriptionOnchang = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(event.target.value);
   };
 
@@ -60,7 +76,7 @@ export default function Modal({ onAdd }: props) {
             <button
               type="button"
               className="btn btn-success"
-              onClick={() => {}}
+              onClick={handleSubmit}
             >
               Save
             </button>
